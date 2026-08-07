@@ -1,0 +1,365 @@
+/* ==================================================================
+   눈에 안 보이는 시간 — 대학생 반복 행동 실태조사
+   style.css
+   ------------------------------------------------------------------
+   설계 방향: '설문 기록지(record sheet)'
+   - 세리프 없음. 굵은 산세리프 제목 + 모노 라벨.
+   - 각 단계는 테두리를 가진 한 장의 '용지'이고, 상단에 머리띠가 붙는다.
+   - 모서리는 각지게(radius 0). 선택 상태는 키 컬러로 꽉 채운다.
+   ================================================================== */
+
+:root{
+  /* 잉크 */
+  --ink:#0E1410;
+  --ink-2:#2E3A32;
+  --muted:#66746A;
+  --faint:#95A29A;
+
+  /* 바탕 */
+  --paper:#F5F7F2;
+  --card:#FFFFFF;
+  --line:#E0E4DA;
+  --line-2:#C2CABB;
+
+  /* 키 컬러 — 초록 */
+  --key:#067A46;          /* 흰 배경 대비 5.4:1 */
+  --key-deep:#04512E;
+  --key-bright:#3DDC84;   /* 어두운 판 위에서만 사용 */
+  --key-wash:#E7F3EC;
+  --key-line:#A7D3BC;
+
+  /* 경고 */
+  --warn:#8A3B24;
+  --warn-soft:#F8EAE4;
+
+  --sans:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  --pad:26px;   /* 용지 안쪽 여백 */
+}
+
+@media(max-width:520px){
+  :root{ --pad:17px }
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:var(--sans);
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+  padding:0 16px calc(124px + env(safe-area-inset-bottom));
+}
+
+@media(max-width:520px){
+  body{ padding-left:10px;padding-right:10px }
+}
+
+.wrap{max-width:640px;margin:0 auto}
+
+/* 스크린리더 전용 */
+.sr{
+  position:absolute;width:1px;height:1px;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;
+}
+
+/* ── 진행 표시: 연속 막대가 아니라 단계별 눈금 ── */
+#bar{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  display:flex;gap:2px;padding:0 0 0 0;
+}
+#bar span{
+  flex:1;height:3px;background:var(--line-2);
+  transition:background .3s ease;
+}
+#bar span.done{background:var(--key)}
+
+/* ==================================================================
+   용지 (intro / step / done)
+   ================================================================== */
+
+.sheet{
+  background:var(--card);
+  border:1px solid var(--line-2);
+  padding:0 var(--pad) 30px;
+}
+
+/* 용지 상단 머리띠 — 여백을 뚫고 나가 가장자리까지 닿는다 */
+.band{
+  margin:0 calc(var(--pad) * -1) 26px;
+  padding:12px var(--pad);
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:.18em;
+  line-height:1.5;
+}
+.band.dark{background:var(--ink);color:var(--key-bright)}
+.band.key{background:var(--key);color:#fff}
+
+/* ── 인트로 ── */
+#intro{margin-top:46px;animation:rise .5s ease both}
+
+h1{
+  font-size:clamp(33px,8.6vw,50px);
+  font-weight:800;
+  line-height:1.12;
+  letter-spacing:-.035em;
+  margin-bottom:18px;
+}
+h1 span{
+  display:block;margin-top:15px;
+  font-size:.36em;font-weight:600;line-height:1.5;
+  letter-spacing:-.01em;color:var(--ink-2);
+}
+
+.lede{font-size:15.5px;color:var(--ink-2);margin-bottom:28px}
+
+.facts{
+  display:flex;flex-wrap:wrap;gap:0;
+  border:1px solid var(--line);
+  margin-bottom:26px;
+}
+.facts div{
+  flex:1 1 33%;min-width:96px;
+  padding:12px 14px;
+  border-left:1px solid var(--line);
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;
+  color:var(--muted);line-height:1.7;
+}
+.facts div:first-child{border-left:0}
+.facts b{display:block;font-family:var(--sans);font-size:14.5px;
+  letter-spacing:normal;font-weight:700;color:var(--ink)}
+
+.note{
+  border-left:3px solid var(--key);
+  background:var(--key-wash);
+  padding:16px 18px;
+}
+.note p{font-size:13.5px;color:var(--ink-2)}
+.note p + p{margin-top:9px}
+.note strong{color:var(--key-deep);font-weight:700}
+
+/* ── 단계 ── */
+.step{display:none;margin-bottom:20px}
+.step.on{display:block;animation:rise .38s ease both}
+
+@keyframes rise{
+  from{opacity:0;transform:translateY(9px)}
+  to{opacity:1;transform:none}
+}
+
+h2{
+  font-size:25px;font-weight:800;letter-spacing:-.03em;
+  line-height:1.3;margin-bottom:9px;
+}
+.sub{
+  font-size:13.5px;color:var(--muted);
+  padding-bottom:20px;margin-bottom:28px;
+  border-bottom:1px solid var(--line);
+}
+
+/* ==================================================================
+   문항
+   ================================================================== */
+
+.q{margin-bottom:28px}
+.q:last-child{margin-bottom:0}
+
+.q > p{font-size:15px;font-weight:700;line-height:1.5;margin-bottom:11px}
+.q > p .n{
+  display:inline-block;min-width:26px;
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--key);letter-spacing:.04em;
+}
+.q > p .opt{font-weight:400;color:var(--muted);font-size:12.5px}
+.hint{font-size:12.5px;color:var(--muted);margin:-5px 0 11px}
+
+/* ── 보기: 공통 ── */
+label.o{
+  position:relative;cursor:pointer;background:var(--card);
+  border:1px solid var(--line-2);
+  font-size:13.5px;line-height:1.45;
+  transition:border-color .12s,background .12s,color .12s;
+}
+label.o input{position:absolute;width:0;height:0;opacity:0;pointer-events:none}
+label.o:hover{border-color:var(--key-line)}
+
+/* 선택 상태는 JS가 .sel 을 붙인다 (:has() 미지원 브라우저 대응) */
+label.o.sel{border-color:var(--key);background:var(--key-wash)}
+label.o.sel > span{font-weight:700;color:var(--key-deep)}
+
+/* 초점 표시 — :has() 를 쓸 수 있으면 키보드 초점에만 보이게 좁힌다 */
+label.o:focus-within{outline:2px solid var(--key);outline-offset:2px;z-index:3}
+@supports selector(:has(*)){
+  label.o:focus-within{outline:none}
+  label.o:has(input:focus-visible){outline:2px solid var(--key);outline-offset:2px;z-index:3}
+}
+
+/* ── 보기: 가로 칩 (짧은 보기) ── */
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opts label.o{padding:10px 14px}
+.opts label.o.sel{background:var(--key);border-color:var(--key)}
+.opts label.o.sel > span{color:#fff}
+
+/* ── 보기: 세로 행 (긴 보기) — 테두리를 맞물리게 겹친다 ── */
+.opts.col{display:block}
+.opts.col label.o{
+  display:flex;align-items:flex-start;gap:11px;
+  width:100%;padding:12px 14px;margin-top:-1px;
+}
+.opts.col label.o:first-child{margin-top:0}
+.opts.col label.o.sel{z-index:2}
+
+/* 지시자 — 라디오는 원, 체크박스는 사각 */
+.ind{
+  flex:0 0 auto;width:15px;height:15px;margin-top:3px;
+  border:1.5px solid var(--line-2);background:#fff;
+  transition:border-color .12s,background .12s;
+}
+.ind.radio{border-radius:50%}
+label.o:hover .ind{border-color:var(--key-line)}
+label.o.sel .ind{border-color:var(--key);background:var(--key)}
+label.o.sel .ind::after{
+  content:"";display:block;
+  width:5px;height:9px;margin:0 auto;
+  border:2px solid #fff;border-top:0;border-left:0;
+  transform:translateY(-1px) rotate(43deg);
+}
+label.o.sel .ind.radio::after{
+  width:5px;height:5px;margin:3px auto;border:0;border-radius:50%;
+  background:#fff;transform:none;
+}
+
+/* ── 척도: 이어붙인 세그먼트 ── */
+.scale{display:flex}
+.scale label.o{
+  flex:1;text-align:center;padding:13px 2px;margin-left:-1px;
+  font-family:var(--mono);font-size:13px;
+}
+.scale label.o:first-child{margin-left:0}
+.scale label.o.sel{background:var(--key);border-color:var(--key);z-index:2}
+.scale label.o.sel > span{color:#fff}
+.scaleends{
+  display:flex;justify-content:space-between;gap:12px;
+  font-size:11.5px;color:var(--muted);margin-top:8px;
+}
+
+/* ── 자유 응답 ── */
+textarea{
+  width:100%;font-family:var(--sans);font-size:14px;color:var(--ink);
+  border:1px solid var(--line-2);background:var(--card);
+  padding:11px 13px;border-radius:0;resize:vertical;line-height:1.6;
+}
+textarea:focus{outline:2px solid var(--key);outline-offset:-1px;border-color:var(--key)}
+textarea::placeholder{color:var(--faint)}
+
+/* ==================================================================
+   하단 내비게이션
+   ================================================================== */
+
+.nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:40;
+  padding:18px 16px calc(18px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,var(--paper) 66%,rgba(245,247,242,0));
+}
+.nav .wrap{display:flex;gap:12px;align-items:center}
+
+button{
+  font-family:var(--sans);cursor:pointer;border:none;border-radius:0;
+  transition:background .15s,color .15s;
+}
+.next{
+  flex:1;background:var(--key);color:#fff;
+  font-size:15px;font-weight:700;letter-spacing:-.01em;padding:15px;
+}
+.next:hover{background:var(--key-deep)}
+.next:disabled{background:var(--line-2);color:#fff;cursor:not-allowed}
+.back{
+  background:none;color:var(--muted);font-size:13.5px;font-weight:600;
+  padding:15px 2px;text-decoration:underline;text-underline-offset:4px;
+}
+.back:hover{color:var(--ink)}
+.count{
+  font-family:var(--mono);font-size:11px;color:var(--muted);
+  white-space:nowrap;letter-spacing:.06em;
+}
+
+/* ==================================================================
+   결과 판
+   ================================================================== */
+
+.readout{
+  background:var(--ink);color:#fff;
+  padding:34px 24px 28px;margin-bottom:22px;
+}
+.readout .cap{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;
+  color:var(--key-bright);margin-bottom:18px;
+}
+.readout .fig{
+  font-family:var(--mono);font-weight:700;
+  font-size:clamp(50px,15vw,82px);line-height:1;letter-spacing:-.05em;
+  font-variant-numeric:tabular-nums;color:var(--key-bright);margin-bottom:6px;
+}
+.readout .unit{font-size:14px;color:#93A399;margin-bottom:20px}
+.readout hr{border:0;border-top:1px solid #2C3831;margin:18px 0}
+.readout .row{
+  display:flex;justify-content:space-between;gap:12px;
+  font-size:13px;color:#B4C2B9;padding:5px 0;
+}
+.readout .row b{font-family:var(--mono);color:#fff;font-weight:500}
+
+.disc{
+  font-size:12px;color:var(--muted);line-height:1.65;
+  padding-left:12px;border-left:2px solid var(--line-2);
+  margin-bottom:30px;
+}
+
+/* ==================================================================
+   완료
+   ================================================================== */
+
+#done{display:none;margin-top:46px}
+#done.on{display:block;animation:rise .45s ease both}
+#done h2{font-size:27px;margin-bottom:14px}
+#done > p{font-size:14.5px;color:var(--ink-2);margin-bottom:12px}
+
+.aside{
+  margin-top:32px;border:1px solid var(--line);
+  border-left:3px solid var(--key);padding:18px 20px;
+}
+.aside h3{font-size:14px;font-weight:700;margin-bottom:9px}
+.aside p{font-size:13px;color:var(--ink-2);margin-bottom:10px}
+.aside p:last-child{margin-bottom:0}
+.aside a{color:var(--key);font-weight:700;text-underline-offset:3px}
+
+/* ── 오류 ── */
+.err{
+  display:none;margin-top:14px;padding:11px 13px;
+  background:var(--warn-soft);border-left:3px solid var(--warn);
+  font-size:12.5px;color:var(--warn);line-height:1.6;
+}
+.err.on{display:block}
+
+/* ==================================================================
+   반응형 / 접근성
+   ================================================================== */
+
+@media(max-width:430px){
+  /* 칩을 전폭으로 늘리지 않는다. 빈도 단계는 9문항 × 5보기라
+     한 줄에 하나씩 깔리면 화면이 감당 못 할 만큼 길어진다. */
+  .opts label.o{padding:9px 11px;font-size:13px}
+  .scale label.o{padding:13px 0;font-size:12px}
+  .facts div{flex:1 1 100%;border-left:0;border-top:1px solid var(--line)}
+  .facts div:first-child{border-top:0}
+}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation:none !important;transition:none !important}
+}
