@@ -3,162 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>대학생 반복 행동 실태조사</title>
+<title>눈에 안 보이는 시간 · 대학생 반복 행동 실태조사</title>
 <meta name="description" content="문 잠금, 메시지, 정리 — 반복해서 확인하는 데 쓰는 시간을 조사합니다. 약 5분.">
+<meta name="theme-color" content="#067A46">
+<meta property="og:type" content="website">
 <meta property="og:title" content="눈에 안 보이는 시간">
 <meta property="og:description" content="대학생 반복 행동 실태조사 · 약 5분 · 익명">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<style>
-:root{
-  --ink:#151F29;
-  --ink-2:#3A4954;
-  --muted:#77848D;
-  --faint:#A6B0B6;
-  --paper:#EDF0EF;
-  --card:#FFFFFF;
-  --line:#DBE0DE;
-  --line-2:#C5CCC9;
-  --accent:#1F6675;
-  --accent-soft:#E2EDEF;
-  --accent-line:#9FC0C7;
-  --warn:#8A4B2A;
-  --warn-soft:#F3E9E3;
-  --serif:'Gowun Batang',serif;
-  --sans:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;
-  --mono:'JetBrains Mono',ui-monospace,monospace;
-  --r:3px;
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{scroll-behavior:smooth}
-body{
-  font-family:var(--sans);background:var(--paper);color:var(--ink);
-  line-height:1.62;-webkit-font-smoothing:antialiased;
-  padding:0 18px calc(120px + env(safe-area-inset-bottom));
-}
-
-/* progress */
-#bar{position:fixed;top:0;left:0;right:0;height:2px;background:var(--line);z-index:50}
-#bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .4s cubic-bezier(.4,0,.2,1)}
-
-.wrap{max-width:620px;margin:0 auto}
-
-/* ── intro ── */
-#intro{padding:76px 0 40px;animation:in .6s ease both}
-.brow{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--accent);margin-bottom:26px}
-h1{font-family:var(--serif);font-size:clamp(38px,10vw,58px);font-weight:700;line-height:1.14;letter-spacing:-.02em;margin-bottom:20px}
-h1 span{display:block;font-size:.42em;font-family:var(--sans);font-weight:600;letter-spacing:-.01em;color:var(--ink-2);margin-top:16px;line-height:1.5}
-.lede{font-size:16px;color:var(--ink-2);margin-bottom:34px}
-.facts{border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);padding:16px 0;margin-bottom:34px;display:flex;flex-wrap:wrap;gap:8px 28px}
-.facts div{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
-.facts b{color:var(--ink);font-weight:500}
-.note{background:var(--card);border:1px solid var(--line);padding:18px 20px;margin-bottom:30px}
-.note p{font-size:13.5px;color:var(--ink-2)}
-.note p+p{margin-top:9px}
-.note strong{color:var(--ink)}
-
-/* ── steps ── */
-.step{display:none;padding:60px 0 20px}
-.step.on{display:block;animation:in .45s ease both}
-@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-
-.stepmark{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--accent);margin-bottom:14px}
-h2{font-family:var(--serif);font-size:27px;font-weight:700;letter-spacing:-.02em;line-height:1.32;margin-bottom:10px}
-.sub{font-size:14px;color:var(--muted);margin-bottom:34px;padding-bottom:20px;border-bottom:1px solid var(--line-2)}
-
-.q{margin-bottom:30px}
-.q>p{font-size:15.5px;font-weight:600;margin-bottom:12px;line-height:1.5}
-.q>p .n{font-family:var(--mono);font-size:11px;color:var(--faint);margin-right:8px;font-weight:400}
-.hint{font-size:12.5px;color:var(--muted);margin:-6px 0 12px}
-
-/* option chips */
-.opts{display:flex;flex-wrap:wrap;gap:6px}
-.opts.col{flex-direction:column;gap:6px}
-label.o{
-  display:block;position:relative;cursor:pointer;
-  border:1px solid var(--line-2);background:var(--card);
-  padding:11px 14px;font-size:13.5px;border-radius:var(--r);
-  transition:border-color .12s,background .12s;flex:0 1 auto;
-}
-.opts.col label.o{width:100%}
-label.o input{position:absolute;opacity:0;pointer-events:none}
-label.o:hover{border-color:var(--accent-line)}
-label.o:has(input:checked){border-color:var(--accent);background:var(--accent-soft);font-weight:600}
-label.o:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
-
-/* scale */
-.scale{display:flex;gap:4px}
-.scale label.o{flex:1;text-align:center;padding:12px 2px;font-family:var(--mono);font-size:13px}
-.scaleends{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-top:8px}
-
-textarea,input[type=text]{
-  width:100%;font-family:var(--sans);font-size:14px;color:var(--ink);
-  border:1px solid var(--line-2);background:var(--card);padding:11px 13px;
-  border-radius:var(--r);resize:vertical;
-}
-textarea:focus,input:focus{outline:none;border-color:var(--accent)}
-
-/* nav */
-.nav{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(to top,var(--paper) 68%,transparent);padding:20px 18px calc(20px + env(safe-area-inset-bottom));z-index:40}
-.nav .wrap{display:flex;gap:10px;align-items:center}
-button{font-family:var(--sans);cursor:pointer;border:none;border-radius:var(--r);transition:opacity .15s,background .15s}
-.next{flex:1;background:var(--ink);color:#fff;font-size:15px;font-weight:600;padding:15px}
-.next:hover{background:var(--accent)}
-.next:disabled{background:var(--line-2);color:var(--muted);cursor:not-allowed}
-.back{background:none;color:var(--muted);font-size:13.5px;padding:15px 4px;text-decoration:underline;text-underline-offset:3px}
-.count{font-family:var(--mono);font-size:11px;color:var(--faint);white-space:nowrap}
-
-/* ── readout ── */
-.readout{background:var(--ink);color:#fff;padding:38px 26px 32px;margin:8px 0 26px;border-radius:var(--r)}
-.readout .cap{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--accent-line);margin-bottom:20px}
-.readout .fig{font-family:var(--mono);font-weight:700;font-size:clamp(52px,15vw,84px);line-height:1;letter-spacing:-.045em;font-variant-numeric:tabular-nums;margin-bottom:6px}
-.readout .unit{font-size:15px;color:#B9C6CC;margin-bottom:22px}
-.readout hr{border:0;border-top:1px solid #34424E;margin:20px 0}
-.readout .row{display:flex;justify-content:space-between;font-size:13px;color:#C6D2D7;padding:5px 0}
-.readout .row b{font-family:var(--mono);color:#fff;font-weight:500}
-.disc{font-size:12px;color:var(--muted);margin-bottom:34px;padding-left:12px;border-left:2px solid var(--line-2)}
-
-/* ── done ── */
-#done{display:none;padding:80px 0 40px;text-align:center}
-#done.on{display:block;animation:in .5s ease both}
-#done h2{font-family:var(--serif);font-size:30px;margin-bottom:16px}
-#done p{font-size:14.5px;color:var(--ink-2);max-width:44ch;margin:0 auto 14px}
-.aside{margin-top:40px;background:var(--card);border:1px solid var(--line);padding:20px;text-align:left}
-.aside h3{font-size:14px;font-weight:700;margin-bottom:8px}
-.aside p{font-size:13px;color:var(--ink-2);margin:0 0 10px}
-.aside a{color:var(--accent);font-weight:600}
-
-.err{font-size:12.5px;color:var(--warn);background:var(--warn-soft);padding:9px 12px;border-radius:var(--r);margin-top:12px;display:none}
-.err.on{display:block}
-
-@media(max-width:420px){
-  .opts label.o{flex:1 1 100%}
-  .scale label.o{padding:12px 0;font-size:12px}
-}
-@media(prefers-reduced-motion:reduce){
-  *{animation:none!important;transition:none!important}
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="bar"><i></i></div>
+<div id="bar" aria-hidden="true"></div>
 
 <div class="wrap">
 
 <!-- ══ INTRO ══ -->
-<section id="intro">
-  <div class="brow">대학생 반복 행동 실태조사</div>
+<section id="intro" class="sheet">
+  <div class="band key">대학생 반복 행동 실태조사</div>
+
   <h1>눈에 안 보이는 시간<span>문 잠금, 메시지, 정리 — 다시 확인하는 데 쓰는 시간을 조사합니다.</span></h1>
+
   <p class="lede">대부분의 사람은 자기가 이런 일에 얼마를 쓰는지 세어본 적이 없습니다. 이 조사는 그 시간을 재보는 것에서 시작합니다. 끝까지 응답하시면 본인의 추정 시간을 바로 확인하실 수 있습니다.</p>
 
   <div class="facts">
-    <div>소요 <b>약 5분</b></div>
-    <div>문항 <b>25개</b></div>
-    <div><b>익명</b></div>
+    <div>소요 시간<b>약 5분</b></div>
+    <div>문항 수<b><span id="qcount">—</span>개</b></div>
+    <div>응답 방식<b>익명</b></div>
   </div>
 
   <div class="note">
@@ -167,24 +42,24 @@ button{font-family:var(--sans);cursor:pointer;border:none;border-radius:var(--r)
   </div>
 </section>
 
-<form id="f">
+<form id="f" novalidate>
 
 <!-- ══ 1. 빈도 ══ -->
-<section class="step" data-s="1">
-  <div class="stepmark">1 / 7</div>
+<section class="step sheet">
+  <div class="band dark"></div>
   <h2>지난 한 주 동안</h2>
   <p class="sub">아래 행동을 얼마나 자주 하셨나요? 대략적인 느낌으로 골라주세요.</p>
   <div id="freq"></div>
 </section>
 
 <!-- ══ 2. 강도 ══ -->
-<section class="step" data-s="2">
-  <div class="stepmark">2 / 7</div>
+<section class="step sheet">
+  <div class="band dark"></div>
   <h2>조금 더 구체적으로</h2>
   <p class="sub">앞서 답하신 행동들에 대한 질문입니다.</p>
 
   <div class="q" data-k="q10">
-    <p><span class="n">10</span>확인하려고 가던 길을 되돌아간 적이 있나요? <em style="font-weight:400;color:var(--muted);font-size:13px">(지난 한 달)</em></p>
+    <p><span class="n">10</span>확인하려고 가던 길을 되돌아간 적이 있나요? <span class="opt">(지난 한 달)</span></p>
     <div class="opts" data-opts="없음|1회|2~3회|4회 이상"></div>
   </div>
 
@@ -205,19 +80,20 @@ button{font-family:var(--sans);cursor:pointer;border:none;border-radius:var(--r)
 </section>
 
 <!-- ══ 3. 지장 ══ -->
-<section class="step" data-s="3">
-  <div class="stepmark">3 / 7</div>
+<section class="step sheet">
+  <div class="band dark"></div>
   <h2>실제로 겪은 일</h2>
-  <p class="sub">지난 한 달 동안 위 행동들 때문에 겪은 일이 있다면 모두 골라주세요.</p>
+  <p class="sub">지난 한 달 동안 위 행동들 때문에 겪은 일에 대한 질문입니다.</p>
 
   <div class="q" data-k="q14" data-multi="1">
+    <p><span class="n">14</span>겪은 일이 있다면 모두 골라주세요. <span class="opt">(복수 선택)</span></p>
     <div class="opts col" data-opts="약속이나 수업에 늦거나 가지 못함|마감을 놓치거나 일을 미룸|잠들기 어려웠거나 잠을 설침|해야 할 일에 집중하지 못함|특정 장소·상황·활동을 피함|가족·친구·연인과 마찰|하던 일을 중단하고 되돌아감|해당 없음"></div>
   </div>
 </section>
 
 <!-- ══ 4. 자기평가 ══  (반드시 결과 화면 앞) -->
-<section class="step" data-s="4">
-  <div class="stepmark">4 / 7</div>
+<section class="step sheet">
+  <div class="band dark"></div>
   <h2>스스로는 어떻게 보시나요</h2>
   <p class="sub">정답이 없습니다. 지금 드는 생각 그대로 답해주세요.</p>
 
@@ -235,10 +111,10 @@ button{font-family:var(--sans);cursor:pointer;border:none;border-radius:var(--r)
 </section>
 
 <!-- ══ 5. 시도와 도움 ══ -->
-<section class="step" data-s="5">
-  <div class="stepmark">5 / 7</div>
+<section class="step sheet">
+  <div class="band dark"></div>
   <h2>줄여보려 한 적이 있나요</h2>
-  <p class="sub"></p>
+  <p class="sub">해당하는 경우에만 답해주시면 됩니다.</p>
 
   <div class="q" data-k="q17">
     <p><span class="n">17</span>이 행동을 줄여보려고 시도한 적이 있나요?</p>
@@ -246,7 +122,7 @@ button{font-family:var(--sans);cursor:pointer;border:none;border-radius:var(--r)
   </div>
 
   <div class="q" data-k="q17b">
-    <p><span class="n">17-1</span>있다면 무엇을 해보셨나요? <em style="font-weight:400;color:var(--muted);font-size:13px">(선택)</em></p>
+    <p><span class="n">17-1</span>있다면 무엇을 해보셨나요? <span class="opt">(선택)</span></p>
     <textarea rows="2" placeholder="예: 참아보기, 검색, 친구에게 말하기"></textarea>
   </div>
 
@@ -262,25 +138,25 @@ button{font-family:var(--sans);cursor:pointer;border:none;border-radius:var(--r)
 </section>
 
 <!-- ══ 6. 수용성 ══ -->
-<section class="step" data-s="6">
-  <div class="stepmark">6 / 7</div>
+<section class="step sheet">
+  <div class="band dark"></div>
   <h2>도움이 된다면 어떤 형태로</h2>
   <p class="sub">아직 만들어진 것은 없습니다. 어떤 형태여야 실제로 쓸 것 같은지 알고 싶습니다.</p>
 
   <div class="q" data-k="q20" data-multi="1">
-    <p><span class="n">20</span>실제로 써볼 것 같은 형태를 모두 골라주세요.</p>
+    <p><span class="n">20</span>실제로 써볼 것 같은 형태를 모두 골라주세요. <span class="opt">(복수 선택)</span></p>
     <div class="opts col" data-opts="혼자 쓰는 앱이나 기록지|익명으로 문자·채팅 확인만 받는 형태|주 1회 짧은 온라인 체크인|소규모 모임에 참여|1:1 대면 상담|어떤 형태도 쓰지 않을 것 같다"></div>
   </div>
 
   <div class="q" data-k="q21">
-    <p><span class="n">21</span>반대로, 효과가 좋아도 절대 쓰지 않을 형태가 있다면? <em style="font-weight:400;color:var(--muted);font-size:13px">(선택)</em></p>
+    <p><span class="n">21</span>반대로, 효과가 좋아도 절대 쓰지 않을 형태가 있다면? <span class="opt">(선택)</span></p>
     <textarea rows="2" placeholder="이유도 함께 적어주시면 큰 도움이 됩니다"></textarea>
   </div>
 </section>
 
 <!-- ══ 7. 배경 ══ -->
-<section class="step" data-s="7">
-  <div class="stepmark">7 / 7</div>
+<section class="step sheet">
+  <div class="band dark"></div>
   <h2>마지막으로</h2>
   <p class="sub">통계 분류를 위한 문항입니다.</p>
 
@@ -319,15 +195,16 @@ button{font-family:var(--sans);cursor:pointer;border:none;border-radius:var(--r)
 </section>
 
 <!-- ══ 결과 ══ -->
-<section class="step" data-s="8">
-  <div class="stepmark">응답 완료</div>
+<section class="step sheet" data-result="1">
+  <div class="band dark">응답 완료</div>
   <h2>당신이 쓴 시간</h2>
   <p class="sub">응답하신 빈도를 바탕으로 계산한 지난 한 주의 추정치입니다.</p>
 
   <div class="readout">
     <div class="cap">지난 한 주 · 추정</div>
-    <div class="fig" id="fig">0:00</div>
-    <div class="unit" id="unit">시간 : 분</div>
+    <div class="fig" id="fig" aria-hidden="true">0:00</div>
+    <div class="unit" aria-hidden="true">시간 : 분</div>
+    <p class="sr" id="a11yResult" aria-live="polite"></p>
     <hr>
     <div class="row"><span>하루 평균</span><b id="perday">—</b></div>
     <div class="row"><span>한 달 환산</span><b id="permonth">—</b></div>
@@ -352,7 +229,8 @@ button{font-family:var(--sans);cursor:pointer;border:none;border-radius:var(--r)
 </form>
 
 <!-- ══ 완료 ══ -->
-<section id="done">
+<section id="done" class="sheet">
+  <div class="band key">제출 완료</div>
   <h2>응답해주셔서 고맙습니다</h2>
   <p>보내주신 답변은 대학생의 반복 행동 실태를 파악하는 데 쓰입니다. 창을 닫으셔도 됩니다.</p>
 
@@ -368,6 +246,7 @@ button{font-family:var(--sans);cursor:pointer;border:none;border-radius:var(--r)
 <div class="nav" id="nav" hidden>
   <div class="wrap">
     <button type="button" class="back" id="back">이전</button>
+    <span class="count" id="count"></span>
     <button type="button" class="next" id="next">다음</button>
   </div>
 </div>
@@ -400,102 +279,198 @@ const FREQ_ITEMS = [
 /* 빈도 보기 — [표시, 주간 발생 추정] */
 const FREQ_OPTS = [["없음",0],["1~2회",1.5],["3~6회",4.5],["거의 매일",6],["하루 여러 번",17.5]];
 
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* 보기 하나를 그린다.
+   kind: 'chip'(가로 칩) | 'col'(세로 행) | 'scale'(척도 세그먼트)
+   세로 행에만 지시자(.ind)를 붙인다. 칩과 척도는 채움 자체가 지시자다. */
+function optHTML(name, type, value, text, kind){
+  const ind = kind === 'col' ? `<i class="ind${type === 'radio' ? ' radio' : ''}"></i>` : '';
+  return `<label class="o"><input type="${type}" name="${esc(name)}" value="${value}" `
+       + `data-label="${esc(text)}">${ind}<span>${esc(text)}</span></label>`;
+}
+
 /* ── 빈도 문항 렌더 ── */
 const freqBox = document.getElementById('freq');
-FREQ_ITEMS.forEach((it,i)=>{
+FREQ_ITEMS.forEach((it, i) => {
   const d = document.createElement('div');
-  d.className='q'; d.dataset.k='f'+i;
-  d.innerHTML = `<p><span class="n">${String(i+1).padStart(2,'0')}</span>${it[0]}</p>
-    <div class="opts">${FREQ_OPTS.map((o,j)=>
-      `<label class="o"><input type="radio" name="f${i}" value="${j}">${o[0]}</label>`).join('')}</div>`;
+  d.className = 'q';
+  d.dataset.k = 'f' + i;
+  d.innerHTML =
+    `<p><span class="n">${String(i+1).padStart(2,'0')}</span>${it[0]}</p>`
+  + `<div class="opts">`
+  + FREQ_OPTS.map((o, j) => optHTML('f'+i, 'radio', j, o[0], 'chip')).join('')
+  + `</div>`;
   freqBox.appendChild(d);
 });
 
 /* ── 나머지 보기 렌더 ── */
-document.querySelectorAll('[data-opts]').forEach(box=>{
+document.querySelectorAll('[data-opts]').forEach(box => {
   const q = box.closest('.q');
   const key = q.dataset.k;
-  const multi = q.dataset.multi === '1';
-  box.innerHTML = box.dataset.opts.split('|').map((t,i)=>
-    `<label class="o"><input type="${multi?'checkbox':'radio'}" name="${key}" value="${i}">${t}</label>`
-  ).join('');
+  const type = q.dataset.multi === '1' ? 'checkbox' : 'radio';
+  const kind = box.classList.contains('scale') ? 'scale'
+             : box.classList.contains('col')   ? 'col' : 'chip';
+  box.innerHTML = box.dataset.opts.split('|')
+    .map((t, i) => optHTML(key, type, i, t, kind)).join('');
 });
 
-/* ── 단계 이동 ── */
-const steps = [...document.querySelectorAll('.step')];
-const nav = document.getElementById('nav');
+/* ── 보기 묶음에 접근성 정보 부여 ── */
+document.querySelectorAll('.q').forEach((q, i) => {
+  const lab = q.querySelector(':scope > p');
+  const box = q.querySelector('.opts, .scale');
+  if(!lab) return;
+  lab.id = lab.id || ('qlab-' + i);
+  if(box){
+    box.setAttribute('role', q.dataset.multi === '1' ? 'group' : 'radiogroup');
+    box.setAttribute('aria-labelledby', lab.id);
+  }
+  const ta = q.querySelector('textarea');
+  if(ta) ta.setAttribute('aria-labelledby', lab.id);
+});
+
+/* 인트로의 문항 수는 실제 DOM에서 센다 — 문항을 추가해도 어긋나지 않는다 */
+document.getElementById('qcount').textContent = document.querySelectorAll('.q').length;
+
+/* ── 선택 표시 ──
+   :has(input:checked) 미지원 브라우저에서도 동작하도록 클래스로 관리한다. */
+function syncGroup(q){
+  q.querySelectorAll('label.o').forEach(l => {
+    const inp = l.querySelector('input');
+    l.classList.toggle('sel', !!inp && inp.checked);
+  });
+}
+document.getElementById('f').addEventListener('change', e => {
+  const q = e.target.closest('.q');
+  if(q) syncGroup(q);
+});
+/* 폼 자체가 제출되는 일은 없다 (Enter 키 등) */
+document.getElementById('f').addEventListener('submit', e => e.preventDefault());
+
+/* ══════════════════════════════════════════════════
+   단계 이동
+   ══════════════════════════════════════════════════ */
+const steps    = [...document.querySelectorAll('.step')];
+const qSteps   = steps.filter(s => !s.dataset.result);
+const nav      = document.getElementById('nav');
 const startnav = document.getElementById('startnav');
-const intro = document.getElementById('intro');
-const barI = document.querySelector('#bar i');
-const nextBtn = document.getElementById('next');
-const backBtn = document.getElementById('back');
+const intro    = document.getElementById('intro');
+const bar      = document.getElementById('bar');
+const nextBtn  = document.getElementById('next');
+const backBtn  = document.getElementById('back');
+const countEl  = document.getElementById('count');
 let cur = -1;
 
+/* 진행 눈금 — 단계 수만큼 칸을 만든다 */
+const ticks = steps.map(() => {
+  const s = document.createElement('span');
+  bar.appendChild(s);
+  return s;
+});
+
+/* 단계 머리띠 번호도 DOM에서 센다 */
+qSteps.forEach((s, i) => {
+  s.querySelector('.band').textContent = `${i+1} / ${qSteps.length}`;
+});
+
 function show(i){
-  steps.forEach(s=>s.classList.remove('on'));
-  if(i<0){ intro.style.display='block'; nav.hidden=true; startnav.hidden=false; barI.style.width='0'; return; }
-  intro.style.display='none'; nav.hidden=false; startnav.hidden=true;
+  steps.forEach(s => s.classList.remove('on'));
+  if(i < 0){
+    intro.hidden = false;
+    nav.hidden = true;
+    startnav.hidden = false;
+    ticks.forEach(t => t.classList.remove('done'));
+    cur = -1;
+    return;
+  }
+  intro.hidden = true;
+  nav.hidden = false;
+  startnav.hidden = true;
   steps[i].classList.add('on');
-  barI.style.width = ((i+1)/steps.length*100)+'%';
-  backBtn.style.visibility = i===0 ? 'hidden' : 'visible';
-  nextBtn.textContent = i===steps.length-2 ? '결과 보기' : (i===steps.length-1 ? '제출하기' : '다음');
-  window.scrollTo({top:0,behavior:'instant'});
+  ticks.forEach((t, n) => t.classList.toggle('done', n <= i));
+  backBtn.style.visibility = i === 0 ? 'hidden' : 'visible';
+  countEl.textContent = `${i+1} / ${steps.length}`;
+  nextBtn.textContent = i === steps.length - 2 ? '결과 보기'
+                      : i === steps.length - 1 ? '제출하기' : '다음';
+  window.scrollTo({top: 0, behavior: 'instant'});
   cur = i;
 }
 
-document.getElementById('start').onclick = ()=>show(0);
-backBtn.onclick = ()=>{ if(cur>0) show(cur-1); };
+document.getElementById('start').onclick = () => show(0);
+backBtn.onclick = () => { if(cur > 0) show(cur - 1); };
 
-nextBtn.onclick = ()=>{
-  if(cur === steps.length-2){ calc(); show(cur+1); return; }
-  if(cur === steps.length-1){ submit(); return; }
-  show(cur+1);
+nextBtn.onclick = () => {
+  if(cur === steps.length - 2){ calc(); show(cur + 1); return; }
+  if(cur === steps.length - 1){ submit(); return; }
+  show(cur + 1);
 };
 
-/* ── 시간 계산 ── */
+/* ══════════════════════════════════════════════════
+   시간 계산
+   ══════════════════════════════════════════════════ */
 let result = {};
+
+const fmt = v => `${Math.floor(v/60)}:${String(v % 60).padStart(2,'0')}`;
+
 function calc(){
   let wk = 0;
-  FREQ_ITEMS.forEach((it,i)=>{
+  FREQ_ITEMS.forEach((it, i) => {
     const v = document.querySelector(`input[name="f${i}"]:checked`);
     if(v) wk += FREQ_OPTS[+v.value][1] * it[1];
   });
-  result.weeklyMin = Math.round(wk);
-  const h = Math.floor(wk/60), m = Math.round(wk%60);
-  animate(h,m);
-  const dd = wk/7;
-  document.getElementById('perday').textContent = dd<60 ? `${Math.round(dd)}분` : `${(dd/60).toFixed(1)}시간`;
-  document.getElementById('permonth').textContent = `${(wk*4.3/60).toFixed(1)}시간`;
-  const yr = wk*52/60;
-  document.getElementById('peryear').textContent = yr>=24 ? `${(yr/24).toFixed(1)}일` : `${Math.round(yr)}시간`;
+
+  /* 분 단위 정수로 한 번만 반올림하고, 표시·저장 모두 이 값에서 파생시킨다.
+     (시/분을 따로 반올림하면 59.6분이 "0:60"으로 표시된다) */
+  const total = Math.round(wk);
+  result.weeklyMin = total;
+
+  animate(total);
+
+  const dd = total / 7;
+  document.getElementById('perday').textContent =
+    dd < 60 ? `${Math.round(dd)}분` : `${(dd/60).toFixed(1)}시간`;
+  document.getElementById('permonth').textContent = `${(total*4.3/60).toFixed(1)}시간`;
+  const yr = total * 52 / 60;
+  document.getElementById('peryear').textContent =
+    yr >= 24 ? `${(yr/24).toFixed(1)}일` : `${Math.round(yr)}시간`;
+
+  document.getElementById('a11yResult').textContent =
+    `지난 한 주 추정 ${Math.floor(total/60)}시간 ${total % 60}분`;
 }
 
-function animate(h,m){
+function animate(total){
   const fig = document.getElementById('fig');
-  const total = h*60+m, dur = 900, t0 = performance.now();
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    fig.textContent = `${h}:${String(m).padStart(2,'0')}`; return;
+    fig.textContent = fmt(total);
+    return;
   }
+  const dur = 900, t0 = performance.now();
   (function tick(t){
-    const p = Math.min((t-t0)/dur,1);
-    const e = 1-Math.pow(1-p,3);
-    const v = Math.round(total*e);
-    fig.textContent = `${Math.floor(v/60)}:${String(v%60).padStart(2,'0')}`;
-    if(p<1) requestAnimationFrame(tick);
+    const p = Math.min((t - t0) / dur, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    fig.textContent = fmt(Math.round(total * e));
+    if(p < 1) requestAnimationFrame(tick);
   })(t0);
 }
 
-/* ── 제출 ── */
+/* ══════════════════════════════════════════════════
+   제출
+   ══════════════════════════════════════════════════ */
 function collect(){
-  const d = { ts:new Date().toISOString(), weeklyMin:result.weeklyMin,
-              ref:new URLSearchParams(location.search).get('ref')||'' };
-  document.querySelectorAll('.q').forEach(q=>{
-    const k = q.dataset.k; if(!k) return;
+  const d = {
+    ts: new Date().toISOString(),
+    weeklyMin: result.weeklyMin,
+    ref: new URLSearchParams(location.search).get('ref') || ''
+  };
+  document.querySelectorAll('.q').forEach(q => {
+    const k = q.dataset.k;
+    if(!k) return;
     const ta = q.querySelector('textarea');
     if(ta){ d[k] = ta.value.trim(); return; }
-    const checked = [...q.querySelectorAll('input:checked')];
-    const labels = checked.map(c=>c.parentElement.textContent.trim());
-    d[k] = q.dataset.multi==='1' ? labels.join(' / ') : (labels[0]||'');
+    /* 보기 글자는 data-label 에서 읽는다 — 라벨 안에 지시자 요소가 들어 있어서
+       textContent 를 쓰면 지시자까지 섞여 들어온다 */
+    const labels = [...q.querySelectorAll('input:checked')].map(c => c.dataset.label);
+    d[k] = q.dataset.multi === '1' ? labels.join(' / ') : (labels[0] || '');
   });
   return d;
 }
@@ -503,23 +478,29 @@ function collect(){
 async function submit(){
   const err = document.getElementById('err');
   err.classList.remove('on');
-  nextBtn.disabled = true; nextBtn.textContent = '전송 중…';
+  nextBtn.disabled = true;
+  nextBtn.textContent = '전송 중…';
   const data = collect();
   try{
     if(ENDPOINT){
-      await fetch(ENDPOINT,{method:'POST',mode:'no-cors',
-        headers:{'Content-Type':'text/plain;charset=utf-8'},
-        body:JSON.stringify(data)});
+      await fetch(ENDPOINT, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify(data)
+      });
     }else{
       console.log('[ENDPOINT 미설정] 수집된 응답:', data);
     }
-    document.querySelector('#f').style.display='none';
-    nav.hidden=true; barI.style.width='100%';
+    document.getElementById('f').style.display = 'none';
+    nav.hidden = true;
+    ticks.forEach(t => t.classList.add('done'));
     document.getElementById('done').classList.add('on');
-    window.scrollTo({top:0});
+    window.scrollTo({top: 0});
   }catch(e){
     err.classList.add('on');
-    nextBtn.disabled=false; nextBtn.textContent='제출하기';
+    nextBtn.disabled = false;
+    nextBtn.textContent = '제출하기';
   }
 }
 
