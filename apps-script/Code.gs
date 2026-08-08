@@ -103,6 +103,19 @@ function parse_(e) {
 }
 
 
+/**
+ * 시트의 열이 모자라면 늘린다.
+ *
+ * 새로 만든 시트는 기본 26열이고, 시트는 필요하다고 열을 알아서 늘려주지
+ * 않는다. 26열 밖을 getRange 하거나 열 수보다 긴 행을 appendRow 하면 그
+ * 자리에서 예외가 난다. 이 설문은 OCI-R-K 를 포함하면 58열이라 반드시 넘는다.
+ */
+function ensureColumns_(sh, need) {
+  const have = sh.getMaxColumns();
+  if (need > have) sh.insertColumnsAfter(have, need - have);
+}
+
+
 /** 시트를 가져오고, 없으면 머리글을 세워서 만든다. */
 function sheet_(name, headers) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -110,6 +123,7 @@ function sheet_(name, headers) {
   if (!sh) {
     sh = ss.insertSheet(name);
     if (headers && headers.length) {
+      ensureColumns_(sh, headers.length);
       sh.getRange(1, 1, 1, headers.length).setValues([headers]);
     }
     sh.setFrozenRows(1);
@@ -133,6 +147,7 @@ function syncHeaders_(sh, keys) {
 
   const missing = keys.filter(function (k) { return headers.indexOf(k) === -1; });
   if (missing.length) {
+    ensureColumns_(sh, headers.length + missing.length);
     sh.getRange(1, headers.length + 1, 1, missing.length).setValues([missing]);
     headers = headers.concat(missing);
     sh.setFrozenRows(1);
