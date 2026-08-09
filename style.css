@@ -75,9 +75,8 @@ body{
   clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;
 }
 
-/* ── 진행 표시: 구간마다 알약 하나 ──
-   칸 하나가 구간 하나. 안쪽이 부분적으로 차오를 수 있어야 해서
-   배경과 채움을 분리했다 — OCI-R-K 구간은 화면 4장이 한 칸을 나눠 쓴다. */
+/* ── 진행 표시: 단계마다 알약 하나 ──
+   칸 안쪽이 차오르는 구조라 배경과 채움을 나눠 두었다. */
 #bar{
   position:fixed;top:0;left:0;right:0;z-index:50;
   display:flex;gap:3px;padding:0 3px;
@@ -273,67 +272,6 @@ label.o.sel .ind.radio::after{
   font-size:11.5px;color:var(--muted);margin-top:9px;
 }
 
-/* ==================================================================
-   OCI-R-K 선택 섹션
-   ================================================================== */
-
-.step > p.body{font-size:14.5px;color:var(--ink-2);margin-bottom:12px}
-
-/* 참여 / 건너뛰기 — 두 버튼을 같은 크기로 둔다.
-   건너뛰기를 작게 만들면 사실상 선택지가 아니게 된다.
-   테두리 굵기도 맞춰야 세로로 쌓이는 모바일에서 높이가 어긋나지 않는다. */
-.choice{display:flex;gap:10px;margin:26px 0 24px}
-.choice button{
-  flex:1 1 0;padding:15px 10px;
-  border-radius:var(--r-pill);
-  font-size:15px;font-weight:700;letter-spacing:-.01em;
-}
-.choice .go{
-  background:var(--key);color:#fff;
-  border:1.5px solid var(--key);
-}
-.choice .go:hover{background:var(--key-deep);border-color:var(--key-deep)}
-.choice .skip{
-  background:var(--card);color:var(--ink);
-  border:1.5px solid var(--ink);
-}
-.choice .skip:hover{background:var(--paper)}
-
-/* 출처 표기 */
-.cite{
-  font-size:11.5px;color:var(--muted);line-height:1.65;
-  padding-top:14px;border-top:1px solid var(--line);
-}
-
-/* 0~4 라벨 — 화면마다 한 번. 문항이 6개씩이라 스크롤해도 보이게 붙여둔다.
-   칸 너비를 척도 세그먼트와 맞춰 어느 숫자가 무슨 뜻인지 바로 읽히게 했다.
-   ※ 조상에 overflow 를 걸면 sticky 가 죽는다. .sheet 를 건드리지 말 것. */
-.legend{
-  position:sticky;top:4px;z-index:6;
-  display:flex;gap:5px;
-  background:var(--card);
-  padding:11px 0 10px;margin-bottom:10px;
-  border-bottom:1px solid var(--line);
-}
-.legend span{
-  flex:1 1 0;min-width:0;text-align:center;
-  font-size:10px;line-height:1.32;color:var(--muted);
-  word-break:keep-all;
-}
-.legend b{
-  display:block;margin-bottom:3px;
-  font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--key-deep);
-}
-
-/* 문항 — 18개가 반복되므로 간격을 줄여 한 화면에 더 들어오게 한다 */
-.q.ocir{margin-bottom:20px}
-.q.ocir > p{font-size:14px;font-weight:600;margin-bottom:10px}
-.q.ocir .scale label.o{padding:12px 2px}
-
-/* 미응답 표시 */
-.q.miss > p{color:var(--warn)}
-.q.miss .scale label.o{border-color:var(--warn)}
-
 /* ── 자유 응답 ── */
 textarea{
   width:100%;font-family:var(--sans);font-size:14px;color:var(--ink);
@@ -446,11 +384,6 @@ button{
   .scale label.o{padding:13px 0;font-size:12px}
   .facts div{flex:1 1 100%;border-left:0;border-top:1px solid var(--line)}
   .facts div:first-child{border-top:0}
-  .legend{gap:4px}
-  .legend span{font-size:9px}
-  .legend b{font-size:11.5px}
-  .choice{flex-wrap:wrap}
-  .choice button{flex:1 1 100%}
 }
 
 @media(prefers-reduced-motion:reduce){

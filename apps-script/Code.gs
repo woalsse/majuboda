@@ -108,7 +108,7 @@ function parse_(e) {
  *
  * 새로 만든 시트는 기본 26열이고, 시트는 필요하다고 열을 알아서 늘려주지
  * 않는다. 26열 밖을 getRange 하거나 열 수보다 긴 행을 appendRow 하면 그
- * 자리에서 예외가 난다. 이 설문은 OCI-R-K 를 포함하면 58열이라 반드시 넘는다.
+ * 자리에서 예외가 난다. 이 설문은 32열이라 첫 제출부터 반드시 넘는다.
  */
 function ensureColumns_(sh, need) {
   const have = sh.getMaxColumns();
@@ -134,7 +134,7 @@ function sheet_(name, headers) {
 
 /**
  * 들어온 응답에 새 항목이 있으면 머리글 오른쪽에 열을 늘린다.
- * 나중에 OCI-R-K 18문항을 추가해도 이 스크립트를 고칠 필요가 없다.
+ * 문항을 추가해도 이 스크립트를 고칠 필요가 없다.
  */
 function syncHeaders_(sh, keys) {
   const lastCol = sh.getLastColumn();
