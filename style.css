@@ -339,6 +339,12 @@ button{
   font-size:13px;color:#B2C2BB;padding:5px 0;
 }
 .readout .row b{font-family:var(--mono);color:#fff;font-weight:500}
+/* 내역 두 줄 아래의 합계 */
+.readout .row.sum{
+  margin-top:5px;padding-top:10px;
+  border-top:1px solid #2A3833;color:#fff;font-weight:600;
+}
+.readout .row.sum b{font-weight:700}
 
 .disc{
   font-size:12px;color:var(--muted);line-height:1.65;

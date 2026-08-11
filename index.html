@@ -194,6 +194,10 @@
     <div class="unit" aria-hidden="true">시간 : 분</div>
     <p class="sr" id="a11yResult" aria-live="polite"></p>
     <hr>
+    <div class="row"><span>확인·정리·세정</span><b id="wcheck">—</b></div>
+    <div class="row"><span>머릿속에서 되짚기</span><b id="wrumin">—</b></div>
+    <div class="row sum"><span>합계</span><b id="wtotal">—</b></div>
+    <hr>
     <div class="row"><span>하루 평균</span><b id="perday">—</b></div>
     <div class="row"><span>한 달 환산</span><b id="permonth">—</b></div>
     <div class="row"><span>1년 환산</span><b id="peryear">—</b></div>
@@ -260,12 +264,31 @@ const FREQ_ITEMS = [
   ["지갑·열쇠·휴대폰이 있는지 반복해서 확인했다", 1],
   ["손을 필요 이상으로 오래 또는 여러 번 씻었다", 2],
   ["물건이나 표면이 더럽게 느껴져 닦거나 만지기를 피했다", 3],
-  ["어제 한 말이나 행동을 머릿속에서 반복해 떠올렸다", 8],
-  ["상대의 답장이나 반응이 어떤 의미인지 반복해서 생각했다", 8],
+  ["어제 한 말이나 행동을 머릿속에서 반복해 떠올렸다", 5],
+  ["상대의 답장이나 반응이 어떤 의미인지 반복해서 생각했다", 5],
   ["물건이 제자리에 있지 않으면 신경이 쓰여 다시 정리했다", 4]
 ];
 /* 빈도 보기 — [표시, 주간 발생 추정] */
 const FREQ_OPTS = [["없음",0],["1~2회",1.5],["3~6회",4.5],["거의 매일",6],["하루 여러 번",17.5]];
+
+/* ── 반추 문항 ──
+   반추는 임상적으로 강박보다 범불안·우울과 더 많이 겹치는 범주다. 우리가 근거를
+   가장 확신하지 못하는 항목이 대표 숫자를 좌우하면 곤란해서 1회당 8분 → 5분으로
+   낮췄고, 결과 화면에서도 확인 계열과 나눠 보여준다. */
+const RUMINATION_IDX = [6, 7];
+
+/* ── 고비용 사건 (Q10 · Q12) ──
+   확인 행위 자체가 아니라 이동·지연으로 생기는 시간이라 빈도 문항과 겹치지 않는다.
+   이걸 빼면 "확인하러 집에 다시 다녀온" 사람이 몇 분으로 계산된다. 실제로는
+   왕복 30~60분이고, 우리가 가장 잡고 싶은 응답자가 가장 낮게 나오는 셈이 된다.
+
+   두 문항 모두 '지난 한 달' 기준이므로 주 단위로 환산해서 더한다. */
+const Q10_MIN = [0, 25, 62, 125];   // 없음 / 1회 / 2~3회 / 4회 이상  (분, 한 달)
+const Q12_MIN = [0, 22,  60, 120];  // 없음 / 1~2회 / 3회 이상 / 자주 (분, 한 달)
+
+/* 되돌아가느라 늦은 경우처럼 Q10 과 Q12 는 같은 사건을 가리킬 수 있다. */
+const EVENT_OVERLAP = 0.8;
+const WEEKS_PER_MONTH = 4.3;
 
 
 /* ══════════════════════════════════════════════════
@@ -412,34 +435,72 @@ nextBtn.onclick = () => {
 /* ══════════════════════════════════════════════════
    시간 계산
    ══════════════════════════════════════════════════ */
-let result = {};
+let result = { weeklyMin: 0, check: 0, rumin: 0, event: 0 };
 
 const fmt = v => `${Math.floor(v/60)}:${String(v % 60).padStart(2,'0')}`;
 
+/* 내역 줄에 쓰는 표기. 한 시간이 안 되면 '분'만 적는다. */
+const hm = m => {
+  const h = Math.floor(m / 60), r = m % 60;
+  return h ? `${h}시간 ${r}분` : `${r}분`;
+};
+
+/** 고른 보기의 값을 표에서 찾는다. 안 골랐으면 0. */
+function pickMinutes(name, table){
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? (table[+el.value] || 0) : 0;
+}
+
+/**
+ * 주간 추정 시간을 계산한다.
+ *
+ * 두 갈래로 나눠 쌓는다.
+ *   확인·정리·세정 = 반추를 뺀 빈도 7문항 + Q10·Q12 에서 나온 이동/지연 시간
+ *   되짚기        = 반추 2문항
+ *
+ * 소계를 각각 반올림하고 합계는 그 둘을 더해서 만든다. 따로 반올림하면
+ * 화면에 적힌 두 줄과 합계가 1분씩 어긋난다.
+ */
 function calc(){
-  let wk = 0;
+  let check = 0, rumin = 0;
+
   FREQ_ITEMS.forEach((it, i) => {
     const v = document.querySelector(`input[name="f${i}"]:checked`);
-    if(v) wk += FREQ_OPTS[+v.value][1] * it[1];
+    if(!v) return;
+    const mins = FREQ_OPTS[+v.value][1] * it[1];
+    if(RUMINATION_IDX.indexOf(i) !== -1) rumin += mins;
+    else check += mins;
   });
 
-  /* 분 단위 정수로 한 번만 반올림하고, 표시·저장 모두 이 값에서 파생시킨다.
-     (시/분을 따로 반올림하면 59.6분이 "0:60"으로 표시된다) */
-  const total = Math.round(wk);
-  result.weeklyMin = total;
+  // Q10·Q12 는 한 달 기준이라 주 단위로 환산하고, 겹칠 수 있으니 함께 보정한다
+  const monthly = pickMinutes('q10', Q10_MIN) + pickMinutes('q12', Q12_MIN);
+  const event = monthly * EVENT_OVERLAP / WEEKS_PER_MONTH;
+  check += event;
+
+  const wCheck = Math.round(check);
+  const wRumin = Math.round(rumin);
+  const wEvent = Math.round(event);
+  const total  = wCheck + wRumin;
+
+  result = { weeklyMin: total, check: wCheck, rumin: wRumin, event: wEvent };
 
   animate(total);
+
+  document.getElementById('wcheck').textContent = hm(wCheck);
+  document.getElementById('wrumin').textContent = hm(wRumin);
+  document.getElementById('wtotal').textContent = hm(total);
 
   const dd = total / 7;
   document.getElementById('perday').textContent =
     dd < 60 ? `${Math.round(dd)}분` : `${(dd/60).toFixed(1)}시간`;
-  document.getElementById('permonth').textContent = `${(total*4.3/60).toFixed(1)}시간`;
+  document.getElementById('permonth').textContent = `${(total*WEEKS_PER_MONTH/60).toFixed(1)}시간`;
   const yr = total * 52 / 60;
   document.getElementById('peryear').textContent =
     yr >= 24 ? `${(yr/24).toFixed(1)}일` : `${Math.round(yr)}시간`;
 
   document.getElementById('a11yResult').textContent =
-    `지난 한 주 추정 ${Math.floor(total/60)}시간 ${total % 60}분`;
+    `지난 한 주 추정 ${Math.floor(total/60)}시간 ${total % 60}분. `
+  + `확인·정리·세정 ${hm(wCheck)}, 머릿속에서 되짚기 ${hm(wRumin)}.`;
 }
 
 function animate(total){
@@ -462,9 +523,14 @@ function animate(total){
    제출
    ══════════════════════════════════════════════════ */
 function collect(){
+  /* 소계를 따로 남긴다. 나중에 계수를 보정할 때 원본 응답만으로는
+     어느 갈래에서 얼마가 나왔는지 되짚기 어렵다. */
   const d = {
     ts: new Date().toISOString(),
-    weeklyMin: result.weeklyMin,
+    weekly_total: result.weeklyMin,
+    weekly_check: result.check,
+    weekly_rumin: result.rumin,
+    weekly_event: result.event,
     ref: new URLSearchParams(location.search).get('ref') || ''
   };
   document.querySelectorAll('.q').forEach(q => {
