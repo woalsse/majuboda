@@ -166,6 +166,15 @@ h1 span{
 .note p + p{margin-top:9px}
 .note strong{color:var(--key-deep);font-weight:700}
 
+/* 새로고침 후 이어서 하기 안내 */
+.resume{
+  margin-top:16px;padding:13px 16px;
+  background:var(--key-wash);border-left:3px solid var(--key);
+  border-radius:var(--r);
+  font-size:13px;font-weight:700;color:var(--key-deep);line-height:1.6;
+}
+.resume span{display:block;margin-top:3px;font-weight:400;color:var(--muted)}
+
 /* ── 단계 ── */
 .step{display:none;margin-bottom:20px}
 .step.on{display:block;animation:rise .38s ease both}
