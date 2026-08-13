@@ -38,8 +38,46 @@
 
   <div class="note">
     <p><strong>이름·학번·연락처를 수집하지 않습니다.</strong> 응답은 통계 목적으로만 사용되며 개별 응답이 공개되지 않습니다.</p>
-    <p>정답이 없습니다. 평소 그대로 답해주시면 됩니다. 답하기 불편한 문항은 건너뛰셔도 됩니다.</p>
+    <p>정답이 없습니다. 평소 그대로 답해주시면 됩니다. 답하기 불편한 문항은 건너뛰셔도 되고, 언제든 창을 닫아 중단하셔도 됩니다.</p>
+    <p class="by"><span id="teamName">—</span></p>
   </div>
+
+  <details class="ethics">
+    <summary>연구 참여 안내 (자세히)</summary>
+
+    <dl>
+      <dt>연구 주체</dt>
+      <dd><span id="eTeam">—</span></dd>
+
+      <dt>목적</dt>
+      <dd>대학생의 반복 행동 실태를 파악해 <span id="ePurpose">—</span>에 사용합니다. 이 외의 목적으로는 사용하지 않습니다.</dd>
+
+      <dt>수집 항목</dt>
+      <dd>설문 응답 내용, 제출 시각, 유입 경로(링크에 표시된 경우). <strong>이름·학번·연락처·IP 주소는 수집하지 않습니다.</strong></dd>
+
+      <dt>자발적 참여</dt>
+      <dd>참여는 전적으로 자발적입니다. 답하기 불편한 문항은 건너뛰실 수 있고, 언제든 중단하실 수 있습니다. 중단하셔도 어떠한 불이익도 없습니다. 참여에 대한 보상은 없습니다.</dd>
+
+      <dt>제3자 제공</dt>
+      <dd>개별 응답은 <strong>어떤 경우에도 제3자에게 제공하지 않습니다.</strong> 다만 전체 응답을 합산한 통계는 발표되거나 공개될 수 있습니다. 이때 개인을 식별할 수 있는 내용은 포함되지 않습니다.</dd>
+
+      <dt>보관과 파기</dt>
+      <dd>응답은 Google 스프레드시트에 저장되며 연구팀 내부에서만 열람합니다. <span id="eKeep">—</span> 보관한 뒤 파기합니다.</dd>
+
+      <dt>응답 삭제 요청</dt>
+      <dd>제출을 마치면 완료 화면에 <strong>응답 번호</strong>가 표시됩니다. 이 번호를 아래 문의처로 알려주시면 해당 응답을 찾아 지워드립니다. 익명 조사라서 <strong>이 번호가 없으면 어느 응답이 본인 것인지 찾을 수 없습니다.</strong></dd>
+
+      <dt>인터뷰 신청</dt>
+      <dd>완료 화면의 인터뷰 신청은 별도 양식으로 진행됩니다. 거기 적으신 연락처는 이 설문 응답과 연결되지 않습니다.</dd>
+
+      <dt>문의</dt>
+      <dd><span id="eContact">—</span></dd>
+    </dl>
+
+    <p class="care">응답하시다 마음이 불편해지시면 언제든 중단하셔도 됩니다. 교내 학생상담센터에서 무료로 상담을 받으실 수 있고, 보건복지부 정신건강 심리상담 바우처를 통해 외부 기관 상담도 지원받으실 수 있습니다.</p>
+  </details>
+
+  <p class="consent">아래 <strong>시작하기</strong>를 누르시면 위 내용을 확인하고 참여에 동의하신 것으로 봅니다.</p>
 
   <p class="resume" id="resume" hidden>답하시던 내용이 남아 있습니다. 이어서 하실 수 있습니다. <span>이 기록은 이 탭에만 임시로 저장되며, 탭을 닫으면 사라집니다.</span></p>
 </section>
@@ -228,6 +266,8 @@
   <h2>응답해주셔서 고맙습니다</h2>
   <p>보내주신 답변은 대학생의 반복 행동 실태를 파악하는 데 쓰입니다. 창을 닫으셔도 됩니다.</p>
 
+  <p class="receipt">응답 번호 <b id="receipt">—</b><span>이 응답을 지우고 싶으시면 이 번호를 문의처(<i id="rContact">—</i>)로 알려주세요. 익명 조사라 이 번호 없이는 어느 응답이 본인 것인지 찾을 수 없습니다.</span></p>
+
   <div class="aside">
     <h3>혹시 이 조사를 하며 마음이 불편하셨다면</h3>
     <p>교내 학생상담센터에서 무료로 상담을 받으실 수 있습니다. 보건복지부 정신건강 심리상담 바우처를 통해 외부 기관 상담도 지원받으실 수 있습니다.</p>
@@ -259,6 +299,16 @@ const ENDPOINT = "https://script.google.com/macros/s/AKfycbzqYzHHahQIjuzZxuav4k6
 /* 인터뷰 신청용 별도 폼. 응답 데이터와 반드시 분리되어 있어야 한다 —
    같은 시트에 연락처가 들어가면 응답과 연결되어 익명성이 깨진다. */
 const INTERVIEW_URL = "https://forms.gle/Hxr5jjVadwCSV1Rr8";
+
+/* ── 연구 참여 안내 ──
+   contact 와 keepUntil 은 아직 비어 있다. 배포 전에 반드시 채울 것.
+   비워두면 안내문에 '(미기재)' 로 드러나고 콘솔에 경고가 남는다. */
+const RESEARCH = {
+  team:      "경북대학교 인액터스 '마주보다' 팀",
+  purpose:   "문제 정의의 타당성을 검증하는 데",
+  keepUntil: "",   // 예: "2027년 2월까지"  ← 채울 것
+  contact:   ""    // 문의·응답 삭제 요청을 받을 이메일  ← 채울 것
+};
 
 /* 빈도 문항 정의 — [문항, 1회당 추정 분] */
 const FREQ_ITEMS = [
@@ -687,6 +737,11 @@ async function submit(){
     return;
   }
 
+  /* 응답 번호를 보여준다. 익명 조사라 이것 없이는 나중에 본인 응답을 찾아
+     지워달라고 할 방법이 없다. 지우고 나서 보여줘야 하므로 순서에 주의. */
+  document.getElementById('receipt').textContent = submissionId;
+  document.getElementById('rContact').textContent = RESEARCH.contact || '(문의처 미기재)';
+
   clearSaved();
   document.getElementById('f').style.display = 'none';
   nav.hidden = true;
@@ -694,6 +749,23 @@ async function submit(){
   document.getElementById('done').classList.add('on');
   window.scrollTo({top: 0});
 }
+
+/* ── 연구 참여 안내 채우기 ── */
+(function fillResearch(){
+  const missing = [];
+  const put = (id, val, label) => {
+    if(!val) missing.push(label);
+    document.getElementById(id).textContent = val || `(${label} 미기재)`;
+  };
+  put('teamName',  RESEARCH.team,      '연구 주체');
+  put('eTeam',     RESEARCH.team,      '연구 주체');
+  put('ePurpose',  RESEARCH.purpose,   '연구 목적');
+  put('eKeep',     RESEARCH.keepUntil, '보관 기간');
+  put('eContact',  RESEARCH.contact,   '문의처');
+  if(missing.length){
+    console.warn('[연구 참여 안내 미완성] 배포 전에 채우세요:', [...new Set(missing)].join(', '));
+  }
+})();
 
 document.getElementById('ilink').href = INTERVIEW_URL;
 
