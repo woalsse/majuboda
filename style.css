@@ -171,7 +171,7 @@ h1 span{
   font-size:12.5px;font-weight:700;color:var(--key-deep);
 }
 
-/* ── 연구 참여 안내 ──
+/* ── 조사 참여 안내 ──
    핵심은 위 .note 에 두고 전문은 접어둔다. 인트로에 벽 같은 글이 서면
    아무도 읽지 않고 이탈만 는다. */
 .ethics{

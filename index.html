@@ -43,10 +43,10 @@
   </div>
 
   <details class="ethics">
-    <summary>연구 참여 안내 (자세히)</summary>
+    <summary>조사 참여 안내 (자세히)</summary>
 
     <dl>
-      <dt>연구 주체</dt>
+      <dt>진행</dt>
       <dd><span id="eTeam">—</span></dd>
 
       <dt>목적</dt>
@@ -62,7 +62,7 @@
       <dd>개별 응답은 <strong>어떤 경우에도 제3자에게 제공하지 않습니다.</strong> 다만 전체 응답을 합산한 통계는 발표되거나 공개될 수 있습니다. 이때 개인을 식별할 수 있는 내용은 포함되지 않습니다.</dd>
 
       <dt>보관과 파기</dt>
-      <dd>응답은 Google 스프레드시트에 저장되며 연구팀 내부에서만 열람합니다. <span id="eKeep">—</span> 보관한 뒤 파기합니다.</dd>
+      <dd>응답은 Google 스프레드시트에 저장되며 팀 내부에서만 열람합니다. <span id="eKeep">—</span> 보관한 뒤 파기합니다.</dd>
 
       <dt>응답 삭제 요청</dt>
       <dd>제출을 마치면 완료 화면에 <strong>응답 번호</strong>가 표시됩니다. 이 번호를 아래 문의처로 알려주시면 해당 응답을 찾아 지워드립니다. 익명 조사라서 <strong>이 번호가 없으면 어느 응답이 본인 것인지 찾을 수 없습니다.</strong></dd>
@@ -300,14 +300,13 @@ const ENDPOINT = "https://script.google.com/macros/s/AKfycbzqYzHHahQIjuzZxuav4k6
    같은 시트에 연락처가 들어가면 응답과 연결되어 익명성이 깨진다. */
 const INTERVIEW_URL = "https://forms.gle/Hxr5jjVadwCSV1Rr8";
 
-/* ── 연구 참여 안내 ──
-   contact 와 keepUntil 은 아직 비어 있다. 배포 전에 반드시 채울 것.
-   비워두면 안내문에 '(미기재)' 로 드러나고 콘솔에 경고가 남는다. */
-const RESEARCH = {
+/* ── 조사 참여 안내 ──
+   빈 값이 있으면 안내문에 '(미기재)' 로 드러나고 콘솔에 경고가 남는다. */
+const PROJECT = {
   team:      "경북대학교 인액터스 '마주보다' 팀",
-  purpose:   "문제 정의의 타당성을 검증하는 데",
-  keepUntil: "",   // 예: "2027년 2월까지"  ← 채울 것
-  contact:   ""    // 문의·응답 삭제 요청을 받을 이메일  ← 채울 것
+  purpose:   "문제 정의의 타당성을 확인하는 데",
+  keepUntil: "2026년 12월 31일까지",
+  contact:   "woalsse@gmail.com"
 };
 
 /* 빈도 문항 정의 — [문항, 1회당 추정 분] */
@@ -740,7 +739,7 @@ async function submit(){
   /* 응답 번호를 보여준다. 익명 조사라 이것 없이는 나중에 본인 응답을 찾아
      지워달라고 할 방법이 없다. 지우고 나서 보여줘야 하므로 순서에 주의. */
   document.getElementById('receipt').textContent = submissionId;
-  document.getElementById('rContact').textContent = RESEARCH.contact || '(문의처 미기재)';
+  document.getElementById('rContact').textContent = PROJECT.contact || '(문의처 미기재)';
 
   clearSaved();
   document.getElementById('f').style.display = 'none';
@@ -750,20 +749,20 @@ async function submit(){
   window.scrollTo({top: 0});
 }
 
-/* ── 연구 참여 안내 채우기 ── */
+/* ── 조사 참여 안내 채우기 ── */
 (function fillResearch(){
   const missing = [];
   const put = (id, val, label) => {
     if(!val) missing.push(label);
     document.getElementById(id).textContent = val || `(${label} 미기재)`;
   };
-  put('teamName',  RESEARCH.team,      '연구 주체');
-  put('eTeam',     RESEARCH.team,      '연구 주체');
-  put('ePurpose',  RESEARCH.purpose,   '연구 목적');
-  put('eKeep',     RESEARCH.keepUntil, '보관 기간');
-  put('eContact',  RESEARCH.contact,   '문의처');
+  put('teamName',  PROJECT.team,      '진행 주체');
+  put('eTeam',     PROJECT.team,      '진행 주체');
+  put('ePurpose',  PROJECT.purpose,   '조사 목적');
+  put('eKeep',     PROJECT.keepUntil, '보관 기간');
+  put('eContact',  PROJECT.contact,   '문의처');
   if(missing.length){
-    console.warn('[연구 참여 안내 미완성] 배포 전에 채우세요:', [...new Set(missing)].join(', '));
+    console.warn('[조사 참여 안내 미완성] 배포 전에 채우세요:', [...new Set(missing)].join(', '));
   }
 })();
 
